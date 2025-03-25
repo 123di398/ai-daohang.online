@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI工具导航 | 一站式AI资源平台</title>
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #9333ea;
+            --light-color: #f5f8ff;
+            --dark-color: #1d2144;
+            --body-color: #f5f7fd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: var(--body-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .search-container {
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        
+        .search-box {
+            display: flex;
+            width: 100%;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .category-button {
+            padding: 0.5rem 1rem;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .category-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .tool-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .tool-image {
+            height: 160px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .tool-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        
+        .tool-content {
+            padding: 1.5rem;
+        }
+        
+        .tool-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .tool-description {
+            color: #666;
+            margin-bottom: 1rem;
+            height: 4.8rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        
+        .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tool-tag {
+            padding: 0.25rem 0.5rem;
+            background-color: var(--light-color);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--primary-color);
+        }
+        
+        .tool-link {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .tool-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+        
+        .footer-link {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>AI工具导航</h1>
+            <p>发现和使用最优质的AI工具，提升创作与工作效率</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="搜索AI工具...">
+                <button class="search-button">搜索</button>
+            </div>
+        </div>
+        
+        <div class="categories">
+            <button class="category-button active" data-category="all">全部</button>
+            <button class="category-button" data-category="image">图像生成</button>
+            <button class="category-button" data-category="video">视频创作</button>
+            <button class="category-button" data-category="text">文本与对话</button>
+            <button class="category-button" data-category="audio">语音与音频</button>
+            <button class="category-button" data-category="code">编程与开发</button>
+            <button class="category-button" data-category="productivity">效率工具</button>
+        </div>
+        
+        <div class="tools-grid">
+            <!-- 视频创作 -->
+            <div class="tool-card" data-category="video">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="即梦AI">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">即梦AI</h3>
+                    <p class="tool-description">剪映提供的AI创作工具，让视频制作更加智能高效。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">视频制作</span>
+                        <span class="tool-tag">AI创作</span>
+                    </div>
+                    <a href="https://jimeng.jianying.com/ai-tool/login?source=url_login" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 文本与对话 -->
+            <div class="tool-card" data-category="text">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="DeepSeek">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">DeepSeek</h3>
+                    <p class="tool-description">强大的AI语言模型平台，提供多样化的自然语言处理服务。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">大语言模型</span>
+                        <span class="tool-tag">自然语言处理</span>
+                    </div>
+                    <a href="https://platform.deepseek.com" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <div class="tool-card" data-category="text">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Kimi Chat">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">月之暗面 (Kimi Chat)</h3>
+                    <p class="tool-description">国内领先的大语言模型对话平台，支持多种场景的AI交流。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">AI对话</span>
+                        <span class="tool-tag">知识问答</span>
+                    </div>
+                    <a href="https://kimi.moonshot.cn" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 图像生成 -->
+            <div class="tool-card" data-category="image">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="文心一格">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">文心一格</h3>
+                    <p class="tool-description">百度推出的AI绘画平台，支持中文描述词生成精美图像。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">AI绘画</span>
+                        <span class="tool-tag">文生图</span>
+                    </div>
+                    <a href="https://yige.baidu.com" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 语音与音频 -->
+            <div class="tool-card" data-category="audio">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="讯飞开放平台">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">讯飞开放平台</h3>
+                    <p class="tool-description">语音识别与合成技术标杆，提供高质量的方言识别支持。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">语音识别</span>
+                        <span class="tool-tag">语音合成</span>
+                        <span class="tool-tag">方言识别</span>
+                    </div>
+                    <a href="https://www.xfyun.cn" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 添加更多AI工具 -->
+            <!-- 图像生成 -->
+            <div class="tool-card" data-category="image">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Midjourney">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">Midjourney</h3>
+                    <p class="tool-description">全球领先的AI绘画工具，可通过文本描述生成高质量艺术图像。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">AI绘画</span>
+                        <span class="tool-tag">艺术创作</span>
+                    </div>
+                    <a href="https://www.midjourney.com" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <div class="tool-card" data-category="image">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Stable Diffusion">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">Stable Diffusion</h3>
+                    <p class="tool-description">开源AI图像生成模型，支持本地部署和多种创作风格。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">开源</span>
+                        <span class="tool-tag">图像生成</span>
+                    </div>
+                    <a href="https://stability.ai" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 文本与对话 -->
+            <div class="tool-card" data-category="text">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="ChatGPT">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">ChatGPT</h3>
+                    <p class="tool-description">OpenAI开发的对话AI，能够理解和生成人类语言。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">对话AI</span>
+                        <span class="tool-tag">内容创作</span>
+                    </div>
+                    <a href="https://chat.openai.com" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <div class="tool-card" data-category="text">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="文心一言">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">文心一言</h3>
+                    <p class="tool-description">百度推出的大语言模型，擅长中文理解与创作。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">中文AI</span>
+                        <span class="tool-tag">知识问答</span>
+                    </div>
+                    <a href="https://yiyan.baidu.com" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 视频创作 -->
+            <div class="tool-card" data-category="video">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Runway">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">Runway</h3>
+                    <p class="tool-description">AI视频生成和编辑工具，支持多种创意视频效果。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">视频生成</span>
+                        <span class="tool-tag">创意编辑</span>
+                    </div>
+                    <a href="https://runwayml.com" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <div class="tool-card" data-category="video">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Synthesia">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">Synthesia</h3>
+                    <p class="tool-description">AI视频人物生成平台，只需输入文本即可创建真人讲解视频。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">AI主播</span>
+                        <span class="tool-tag">教学视频</span>
+                    </div>
+                    <a href="https://www.synthesia.io" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 语音与音频 -->
+            <div class="tool-card" data-category="audio">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Murf AI">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">Murf AI</h3>
+                    <p class="tool-description">专业的AI配音平台，提供自然流畅的多语言语音合成服务。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">AI配音</span>
+                        <span class="tool-tag">多语言</span>
+                    </div>
+                    <a href="https://murf.ai" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 编程与开发 -->
+            <div class="tool-card" data-category="code">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="GitHub Copilot">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">GitHub Copilot</h3>
+                    <p class="tool-description">AI编程助手，可根据注释和上下文自动生成代码。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">编程辅助</span>
+                        <span class="tool-tag">代码生成</span>
+                    </div>
+                    <a href="https://github.com/features/copilot" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+            
+            <!-- 效率工具 -->
+            <div class="tool-card" data-category="productivity">
+                <div class="tool-image">
+                    <img src="/api/placeholder/280/160" alt="Notion AI">
+                </div>
+                <div class="tool-content">
+                    <h3 class="tool-title">Notion AI</h3>
+                    <p class="tool-description">集成在Notion中的AI助手，帮助写作、总结和生成内容。</p>
+                    <div class="tool-tags">
+                        <span class="tool-tag">写作辅助</span>
+                        <span class="tool-tag">内容总结</span>
+                    </div>
+                    <a href="https://www.notion.so/product/ai" class="tool-link" target="_blank">访问网站</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>AI工具导航 © 2025 版权所有</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">关于我们</a>
+                <a href="#" class="footer-link">联系方式</a>
+                <a href="#" class="footer-link">提交工具</a>
+                <a href="#" class="footer-link">使用条款</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 分类筛选功能
+            const categoryButtons = document.querySelectorAll('.category-button');
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    
+                    // 更新按钮状态
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 筛选卡片
+                    toolCards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // 搜索功能
+            const searchInput = document.querySelector('.search-input');
+            const searchButton = document.querySelector('.search-button');
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                toolCards.forEach(card => {
+                    const title = card.querySelector('.tool-title').textContent.toLowerCase();
+                    const description = card.querySelector('.tool-description').textContent.toLowerCase();
+                    const tags = card.querySelectorAll('.tool-tag');
+                    
+                    let tagsText = '';
+                    tags.forEach(tag => {
+                        tagsText += tag.textContent.toLowerCase() + ' ';
+                    });
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm) || tagsText.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // 重置分类按钮
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                categoryButtons[0].classList.add('active');
+            }
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
